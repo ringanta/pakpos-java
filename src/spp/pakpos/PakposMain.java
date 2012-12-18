@@ -25,11 +25,12 @@ public class PakposMain {
 		}
 		System.out.println(PosArea.matrixToString());
 		
-		// Set Destination to PakPos
+		// Set Departure and Destination to PakPos
 		PakPos.tujuan = 3;
+		PakPos.awal = 0;
 		
 		// Start daemon
-		PakPos.addTask(new ExplorerTask(new ArrayList<Integer>(), 0, 0));
+		PakPos.addTask(new ExplorerTask(new ArrayList<Integer>(), PakPos.awal, 0));
 		
 		try{
 			System.out.println(Thread.currentThread().getName() + " is joining");
@@ -40,8 +41,8 @@ public class PakposMain {
 			e.printStackTrace();
 		}
 		
-		System.out.println(Thread.currentThread().getName() + " is going to finish");
 		PakPosPath.printPath();
+		System.out.println(Thread.currentThread().getName() + " is going to finish");
 	}
 
 }

@@ -21,37 +21,41 @@ public class ExplorerTask implements Runnable {
 	@Override
 	public void run() {
 		int inc = PakPos.threadCount.incrementAndGet();
-		System.out.println(Thread.currentThread().getName() + " is starting: " + inc);
+		System.out.println(Thread.currentThread().getName() + ": starting, Number of Task = " + inc);
 		
 		if (!PakPos.isVisited(visitedNodes, node)){
 			visitedNodes.add(node);
-			System.out.println(Thread.currentThread().getName() + ": " +visitedNodes.toString());
-			System.out.println(Thread.currentThread().getName() + ": " + PakPos.isArrive(node) + ": " + node);
+			System.out.println(Thread.currentThread().getName() + ": Visited nodes = " +visitedNodes.toString());
+			
 			if (PakPos.isArrive(node)){
 				Path validOne = new Path(visitedNodes, totalDistance);
 				PakPosPath.savePath(validOne);
-				System.out.println(Thread.currentThread().getName() + " has saved its works, " + validOne.toString());
+				System.out.println(Thread.currentThread().getName() + ": saved its works, " + validOne.toString());
 			} else {
 				ArrayList<Integer> neighbours = PosArea.getNeighbours(node);
-				System.out.println(Thread.currentThread().getName() + " detects neighbour " + neighbours.toString());
+				System.out.println(Thread.currentThread().getName() + ": detects neighbour, " + neighbours.toString());
+				
+				int adjacencyFlag;
 				for (int i=0; i<neighbours.size(); i++){
-					System.out.println(Thread.currentThread().getName() + " is checking ");
-					System.out.println(Thread.currentThread().getName() + ": " + neighbours.get(i) + ", " + PosArea.isNeighbour(neighbours.get(i)));
-					if (PosArea.isNeighbour(neighbours.get(i))){
-						System.out.println(Thread.currentThread().getName() + " is spawning new thread");
-						// Spawn new thread
+					adjacencyFlag = neighbours.get(i);
+					if (PosArea.isNeighbour(adjacencyFlag)){
+						System.out.println(Thread.currentThread().getName() + ": submit new task");
+						
+						// Submit new task to ExecutorService
 						PakPos.addTask(
-							new ExplorerTask(new ArrayList<Integer>(visitedNodes), i, totalDistance + neighbours.get(i))
+							new ExplorerTask(new ArrayList<Integer>(visitedNodes), i, totalDistance + adjacencyFlag)
 						);
 					} else {
-						System.out.println(Thread.currentThread().getName() + " detects invalid neighbour");
+						System.out.println(String.format( "%s: detects invalid neighbour, cell(%s,%s) = %s", Thread.currentThread().getName(), node, i, adjacencyFlag ));
+						System.out.println(Thread.currentThread().getName() + ": printed its works, " + visitedNodes);
 					}
 				}
 			}
 		} else {
 			System.out.println(Thread.currentThread().getName() + " hit visited node");
 		}
-		System.out.println(Thread.currentThread().getName() + " has done: " + PakPos.threadCount.decrementAndGet());
+		PakPos.threadCount.decrementAndGet();
+		System.out.println(Thread.currentThread().getName() + ": has finished, Number of task = " + PakPos.threadCount.get());
 		
 		if (PakPos.threadCount.get() == 0){
 			System.out.println(Thread.currentThread().getName() + " is trying to shutdown the pool");
