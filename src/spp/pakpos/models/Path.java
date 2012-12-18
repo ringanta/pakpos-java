@@ -1,3 +1,6 @@
+/**
+ * Represent Path of PakPos. Path contains sequence of node and length
+ */
 package spp.pakpos.models;
 
 import java.util.ArrayList;

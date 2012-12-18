@@ -29,9 +29,11 @@ public class PakposMain {
 		PakPos.tujuan = 3;
 		PakPos.awal = 0;
 		
-		// Start daemon
+		// Start enumerating all the path and delegate searching process into several thread
 		PakPos.addTask(new ExplorerTask(new ArrayList<Integer>(), PakPos.awal, 0));
 		
+		
+		// Wait all thread to finish
 		try{
 			System.out.println(Thread.currentThread().getName() + " is joining");
 			while (!PakPos.threadPool.isShutdown())
@@ -41,6 +43,7 @@ public class PakposMain {
 			e.printStackTrace();
 		}
 		
+		// Print all valid path from departure to destination
 		PakPosPath.printPath();
 		System.out.println(Thread.currentThread().getName() + " is going to finish");
 	}

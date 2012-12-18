@@ -1,3 +1,7 @@
+/**
+ * Representation of all nodes which may be visited by Pak Pos to deliver a letter
+ * This is Map of all city in form of matrix 2 dimensions
+ */
 package spp.pakpos.models;
 
 import java.util.ArrayList;
