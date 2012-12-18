@@ -56,7 +56,6 @@ public class ExplorerTask implements Runnable {
 		if (PakPos.threadCount.get() == 0){
 			System.out.println(Thread.currentThread().getName() + " is trying to shutdown the pool");
 			PakPos.threadPool.shutdownNow();
-			Thread.currentThread().yield();
 		}
 	}
 
